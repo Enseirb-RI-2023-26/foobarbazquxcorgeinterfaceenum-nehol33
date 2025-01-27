@@ -1,0 +1,141 @@
+name: Autograding Tests
+
+on:
+  - push
+  - workflow_dispatch
+
+permissions:
+  checks: write
+  actions: read
+  contents: read
+
+jobs:
+  run-autograding-tests:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-classroom[bot]'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4.5.0
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Test IBar interface
+        id: test-ibar-interface
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: Test IBar interface
+          setup-command: ''
+          command: mvn -B -q -fae test -Dtest=IBarTest#doAllTests --file pom.xml
+          timeout: 1
+          max-score: 1
+
+      - name: Test IBaz interface
+        id: test-ibaz-interface
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: Test IBaz interface
+          setup-command: ''
+          command: mvn -B -q -fae test -Dtest=IBazTest#doAllTests --file pom.xml
+          timeout: 1
+          max-score: 1
+
+      - name: Test IQux interface
+        id: test-iqux-interface
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: Test IQux interface
+          setup-command: ''
+          command: mvn -B -q -fae test -Dtest=IQuxTest#doAllTests --file pom.xml
+          timeout: 1
+          max-score: 1
+
+      - name: Test ICorge interface
+        id: test-icorge-interface
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: Test ICorge interface
+          setup-command: ''
+          command: mvn -B -q -fae test -Dtest=ICorgeTest#doAllTests --file pom.xml
+          timeout: 1
+          max-score: 1
+
+      - name: Test IFoo interface
+        id: test-ifoo-interface
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: Test IFoo interface
+          setup-command: ''
+          command: mvn -B -q -fae test -Dtest=IFooTest#doAllTests --file pom.xml
+          timeout: 1
+          max-score: 1
+
+      - name: Test Bar class
+        id: test-bar-class
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: Test Bar class
+          setup-command: ''
+          command: mvn -B -q -fae test -Dtest=BarTest#doAllTests --file pom.xml
+          timeout: 1
+          max-score: 2
+
+      - name: Test EBaz enum
+        id: test-baz-class
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: Test EBaz enum
+          setup-command: ''
+          command: mvn -B -q -fae test -Dtest=EBazTest#doAllTests --file pom.xml
+          timeout: 1
+          max-score: 3
+
+      - name: Test Qux class
+        id: test-qux-class
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: Test Qux class
+          setup-command: ''
+          command: mvn -B -q -fae test -Dtest=QuxTest#doAllTests --file pom.xml
+          timeout: 1
+          max-score: 2
+
+      - name: Test Corge class
+        id: test-corge-class
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: Test Corge class
+          setup-command: ''
+          command: mvn -B -q -fae test -Dtest=CorgeTest#doAllTests --file pom.xml
+          timeout: 1
+          max-score: 3
+
+      - name: Test Foo class
+        id: test-foo-class
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: Test Foo class
+          setup-command: ''
+          command: mvn -B -q -fae test -Dtest=FooTest#doAllTests --file pom.xml
+          timeout: 1
+          max-score: 5
+
+      - name: Autograding Reporter
+        uses: classroom-resources/autograding-grading-reporter@v1
+        env:
+          TEST-IBAR-INTERFACE_RESULTS: "${{steps.test-ibar-interface.outputs.result}}"
+          TEST-IBAZ-INTERFACE_RESULTS: "${{steps.test-ibaz-interface.outputs.result}}"
+          TEST-IQUX-INTERFACE_RESULTS: "${{steps.test-iqux-interface.outputs.result}}"
+          TEST-ICORGE-INTERFACE_RESULTS: "${{steps.test-icorge-interface.outputs.result}}"
+          TEST-IFOO-INTERFACE_RESULTS: "${{steps.test-ifoo-interface.outputs.result}}"
+          TEST-BAR-CLASS_RESULTS: "${{steps.test-bar-class.outputs.result}}"
+          TEST-BAZ-CLASS_RESULTS: "${{steps.test-baz-class.outputs.result}}"
+          TEST-QUX-CLASS_RESULTS: "${{steps.test-qux-class.outputs.result}}"
+          TEST-CORGE-CLASS_RESULTS: "${{steps.test-corge-class.outputs.result}}"
+          TEST-FOO-CLASS_RESULTS: "${{steps.test-foo-class.outputs.result}}"
+        with:
+          runners: test-ibar-interface,test-ibaz-interface,test-iqux-interface,test-icorge-interface,test-ifoo-interface,test-bar-class,test-baz-class,test-qux-class,test-corge-class,test-foo-class
