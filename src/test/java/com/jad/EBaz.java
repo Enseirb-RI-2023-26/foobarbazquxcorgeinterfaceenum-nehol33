@@ -5,14 +5,14 @@ public enum EBaz implements IBaz {
     BAZ2("Baz2"),
     BAZ3("Baz3");
 
-    private final String name;
+    private String name;
 
-    EBaz(String name) {
+    private EBaz(String name) {
         this.name = name;
     }
 
     @Override
     public void doSomethingLikeABaz() {
-
+        // Implémentation spécifique
     }
 }

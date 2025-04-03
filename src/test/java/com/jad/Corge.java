@@ -9,11 +9,6 @@ public class Corge implements ICorge {
 
     @Override
     public void setFoo(IFoo foo) {
-
-    }
-
-    @Override
-    public IFoo getfoo() {
-        return null;
+        this.foo = foo;
     }
 }
